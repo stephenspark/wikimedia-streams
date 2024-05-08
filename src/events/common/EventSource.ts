@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import EventSourceInitializer from 'eventsource'
 
-import type { PageCreateEventMessage } from 'events/entities/PageCreateEvent'
-import type { RecentChangeEventMessage } from 'events/entities/RecentChangeEvent'
+import Event from '../../models/Event'
 
 import EventEntity from 'events/common/EventEntity'
+
+import type { PageCreateEventMessage } from 'events/entities/PageCreateEvent'
+import type { RecentChangeEventMessage } from 'events/entities/RecentChangeEvent'
 
 type MessageEventShape<EntityName> =
   EntityName extends 'RecentChangeEventEntity'
@@ -35,6 +37,7 @@ export default class EventSource {
         (typeof params)['entityName']
       >
       console.log(`Message from ENTITY: ${params.entityName}`)
+      Event.create({ type: params.entityName, data: data })
     }
   }
 }
