@@ -32,9 +32,12 @@
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^0.37.1",
+    "@newrelic/native-metrics": "^10.1.1",
     "eventsource": "^2.0.2",
     "express": "^4.19.2",
     "express-validator": "^7.0.1",
-    "mongoose": "^8.3.4"
+    "mongoose": "^8.3.4",
+    "newrelic": "^11.16.0",
+    "winston": "^3.13.0"
   }
 }

@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import EventSourceInitializer from 'eventsource'
+
+import { eventLogger } from '../../libs/winston'
 
 import Event from '../../models/Event'
 
@@ -24,19 +25,21 @@ export default class EventSource {
     const es = new EventSourceInitializer(params.url)
 
     es.onopen = () => {
-      console.log(`ENTITY ${params.entityName} CONNECTED.`)
+      eventLogger.log('info', `ENTITY ${params.entityName} CONNECTED.`)
       return
     }
 
     es.onerror = (e) => {
-      console.log(`ENTITY ${params.entityName} ERRORED: ${e}`)
+      const data = JSON.parse(e.data)
+
+      eventLogger.log('err', `ENTITY ${params.entityName} ERRORED: ${data}`)
     }
 
     es.onmessage = (event: MessageEvent) => {
       const data = JSON.parse(event.data) as MessageEventShape<
         (typeof params)['entityName']
       >
-      console.log(`Message from ENTITY: ${params.entityName}`)
+      eventLogger.log('debug', `Message from ENTITY: ${params.entityName}`)
       Event.create({ type: params.entityName, data: data })
     }
   }

@@ -1,4 +1,6 @@
-import WikimediaEvents from './events/WikimediaEvents'
+import 'newrelic'
 
-// Init
+import * as WikimediaEvents from './events/WikimediaEvents'
+
+// Instantiate event sources
 WikimediaEvents.init()
