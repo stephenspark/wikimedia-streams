@@ -1,17 +1,31 @@
 import EventSource from './common/EventSource'
 
 import { PageCreateEventEntity } from './entities/PageCreateEvent'
+import { PageDeleteEventEntity } from './entities/PageDeleteEvent'
+import { PageLinksChangeEventEntity } from './entities/PageLinksChangeEvent'
+import { PageMoveEventEntity } from './entities/PageMoveEvent'
+import { PagePropertiesChangeEventEntity } from './entities/PagePropertiesChangeEvent'
+import { PageUndeleteEventEntity } from './entities/PageUndeleteEvent'
+import { PageRevisionCreateEventEntity } from './entities/PageRevisionCreateEvent'
 import { RecentChangeEventEntity } from './entities/RecentChangeEvent'
+import EventEntity from './common/EventEntity'
 
-const EVENT_ENTITIES = {
-  [RecentChangeEventEntity.entityName]: RecentChangeEventEntity,
-  [PageCreateEventEntity.entityName]: PageCreateEventEntity,
-}
+const EVENT_ENTITIES = [
+  PageCreateEventEntity,
+  PageDeleteEventEntity,
+  PageLinksChangeEventEntity,
+  PageMoveEventEntity,
+  PagePropertiesChangeEventEntity,
+  PageRevisionCreateEventEntity,
+  PageUndeleteEventEntity,
+  RecentChangeEventEntity,
+]
 
 export function init() {
-  // Instantiate EventSource (stream) for each entity we are tracking
-  for (const key in EVENT_ENTITIES) {
-    const eventEntity = EVENT_ENTITIES[key]
-    new EventSource(eventEntity)
-  }
+  const EventEntities = {
+    entityName: `${EVENT_ENTITIES.map((eventEntity) => eventEntity.entityName).join(',')}`,
+    url: `https://stream.wikimedia.org/v2/stream/${EVENT_ENTITIES.map((eventEntity) => eventEntity.entityAlias).join(',')}`,
+  } as EventEntity
+
+  new EventSource(EventEntities)
 }

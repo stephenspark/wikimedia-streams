@@ -4,10 +4,10 @@ import { eventLogger } from '../../libs/winston'
 
 import Event from '../../models/Event'
 
-import EventEntity from 'events/common/EventEntity'
+import EventEntity from '../common/EventEntity'
 
-import type { PageCreateEventMessage } from 'events/entities/PageCreateEvent'
-import type { RecentChangeEventMessage } from 'events/entities/RecentChangeEvent'
+import type { PageCreateEventMessage } from '../entities/PageCreateEvent'
+import type { RecentChangeEventMessage } from '../entities/RecentChangeEvent'
 
 type MessageEventShape<EntityName> =
   EntityName extends 'RecentChangeEventEntity'
@@ -25,22 +25,27 @@ export default class EventSource {
     const es = new EventSourceInitializer(params.url)
 
     es.onopen = () => {
-      eventLogger.log('info', `ENTITY ${params.entityName} CONNECTED.`)
-      return
+      eventLogger.log('info', {
+        message: `ENTITY ${params.entityName} CONNECTED.`,
+      })
     }
 
-    es.onerror = (e) => {
-      const data = JSON.parse(e.data)
-
-      eventLogger.log('err', `ENTITY ${params.entityName} ERRORED: ${data}`)
+    es.onerror = (event: MessageEvent) => {
+      eventLogger.log('error', {
+        message: `ENTITY ${params.entityName} ERRORED`,
+        error: event,
+      })
     }
 
-    es.onmessage = (event: MessageEvent) => {
+    es.onmessage = async (event: MessageEvent) => {
       const data = JSON.parse(event.data) as MessageEventShape<
         (typeof params)['entityName']
       >
-      eventLogger.log('debug', `Message from ENTITY: ${params.entityName}`)
-      Event.create({ type: params.entityName, data: data })
+      eventLogger.log('debug', {
+        message: `ENTITY ${params.entityName} VERBOSE DATA`,
+        data: data,
+      })
+      await Event.create({ type: params.entityName, data: data })
     }
   }
 }

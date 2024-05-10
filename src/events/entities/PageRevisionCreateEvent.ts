@@ -1,7 +1,7 @@
 import EventEntity from '../common/EventEntity'
 import EventMessage from '../common/EventMessage'
 
-export interface PageCreateEventMessage extends EventMessage {
+export interface PageRevisionCreateEventMessage extends EventMessage {
   comment: string
   database: string
   dt: string
@@ -33,12 +33,12 @@ export interface PageCreateEventMessage extends EventMessage {
     rev_reverted_revs: Array<number>
   }
   rev_sha1: string
-  rev_slots: Record<string, string>
+  rev_slots: Record<string, object> // Slots need to be exported
   rev_timestamp: string
 }
 
-export const PageCreateEventEntity: EventEntity = {
-  url: 'https://stream.wikimedia.org/v2/stream/page-create',
-  entityName: 'PageCreateEventEntity',
-  entityAlias: 'page-create',
+export const PageRevisionCreateEventEntity: EventEntity = {
+  url: 'https://stream.wikimedia.org/v2/stream/revision-create',
+  entityName: 'PageRevisionCreateEventEntity',
+  entityAlias: 'revision-create',
 }
