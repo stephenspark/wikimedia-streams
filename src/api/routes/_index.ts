@@ -1,10 +1,9 @@
 import Router from '@koa/router'
 
+import { index } from '../controllers/_index'
+
 const router = new Router()
 
-router.get('/', (ctx) => {
-  ctx.status = 200
-  ctx.body = { message: 'Hello world' }
-})
+router.get('/', index)
 
 export default router

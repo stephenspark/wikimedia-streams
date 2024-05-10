@@ -1,10 +1,9 @@
 import Router from '@koa/router'
 
+import { index } from '../controllers/healthcheck'
+
 const router = new Router({ prefix: '/healthcheck' })
 
-router.get('/', (ctx) => {
-  ctx.status = 200
-  ctx.body = { message: 'Server is up!', timestamp: Date.now() }
-})
+router.get('/', index)
 
 export default router
