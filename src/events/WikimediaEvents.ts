@@ -10,7 +10,7 @@ import { PageRevisionCreateEventEntity } from './entities/PageRevisionCreateEven
 import { RecentChangeEventEntity } from './entities/RecentChangeEvent'
 import EventEntity from './common/EventEntity'
 
-const EVENT_ENTITIES = [
+export const EVENT_ENTITIES = [
   PageCreateEventEntity,
   PageDeleteEventEntity,
   PageLinksChangeEventEntity,
@@ -27,5 +27,5 @@ export function init() {
     url: `https://stream.wikimedia.org/v2/stream/${EVENT_ENTITIES.map((eventEntity) => eventEntity.entityAlias).join(',')}`,
   } as EventEntity
 
-  new EventSource(EventEntities)
+  return new EventSource(EventEntities)
 }

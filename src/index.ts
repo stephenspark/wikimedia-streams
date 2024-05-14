@@ -14,8 +14,10 @@ app.listen(process.env.PORT || 3000)
 // General process error
 process.on('uncaughtException', (error) => {
   generalLogger.log('error', { error: error })
+  process.exit(1)
 })
 
 process.on('unhandledRejection', (reason) => {
   generalLogger.log('error', { error: reason })
+  process.exit(1)
 })
